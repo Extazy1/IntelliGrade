@@ -1,0 +1,10 @@
+.exame-paper-container {
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    border-radius: 10px;
+    overflow: auto;
+}

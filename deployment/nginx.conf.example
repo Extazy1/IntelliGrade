@@ -1,0 +1,41 @@
+# Example Nginx configuration for serving the IntelliGrade client and proxying Strapi
+#
+# Copy this file to your Nginx configuration directory and adjust the upstream
+# targets (127.0.0.1:3000 and 127.0.0.1:1337) so they reflect your deployment.
+# After reloading Nginx you can hit `curl -I https://YOUR_HOST/strapi/api` to
+# confirm that requests are forwarded to Strapi instead of Next.js.
+
+upstream intelligrade_client {
+    server 127.0.0.1:3000; # Next.js (npm run start)
+}
+
+upstream intelligrade_strapi {
+    server 127.0.0.1:1337; # Strapi (npm run start)
+}
+
+server {
+    listen 80;
+    listen 443 ssl;
+    server_name example.com;
+
+    # SSL configuration omitted for brevity
+
+    location /strapi/ {
+        proxy_pass http://intelligrade_strapi/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+
+        # Ensure Strapi receives the /api prefix instead of Next.js handling it
+        rewrite ^/strapi/(.*)$ /$1 break;
+    }
+
+    location / {
+        proxy_pass http://intelligrade_client;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+    }
+}

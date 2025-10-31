@@ -1,0 +1,51 @@
+{
+  "name": "intelligrade-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "IntelliGrade - AI-Powered Exam Grading System",
+  "scripts": {
+    "build": "strapi build",
+    "deploy": "strapi deploy",
+    "dev": "PUBLIC_URL=http://localhost:1337 strapi develop",
+    "start": "strapi start",
+    "strapi": "strapi"
+  },
+  "dependencies": {
+    "@strapi/plugin-cloud": "5.10.3",
+    "@strapi/plugin-users-permissions": "5.10.3",
+    "@strapi/strapi": "5.10.3",
+    "better-sqlite3": "11.3.0",
+    "nanoid": "^5.1.5",
+    "openai": "^4.87.4",
+    "pdf-lib": "^1.17.1",
+    "pdf-to-png-converter": "^3.6.5",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.0.0",
+    "sharp": "^0.33.5",
+    "styled-components": "^6.0.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=22.x.x",
+    "npm": ">=6.0.0"
+  },
+  "strapi": {
+    "uuid": "a08868c0-3cf0-4e36-be97-13bf278bde93"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "better-sqlite3",
+      "core-js-pure",
+      "esbuild",
+      "sharp"
+    ]
+  }
+}

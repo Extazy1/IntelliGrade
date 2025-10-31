@@ -1,0 +1,17 @@
+{
+  "kind": "singleType",
+  "collectionName": "tests",
+  "info": {
+    "singularName": "test",
+    "pluralName": "tests",
+    "displayName": "Test"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "HelloWorld": {
+      "type": "string"
+    }
+  }
+}

@@ -33,9 +33,6 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "http://47.82.94.221:3000",
-        "http://47.82.94.221",
-        "https://47.82.94.221",
     ],
     allow_credentials=True,
     allow_methods=["*"],     # 允许 OPTIONS/POST 等
@@ -126,10 +123,26 @@ chain_lesson_plan = prompt_lesson_plan | StrOutputParser()
 # 反馈链
 prompt_student_feedback = ChatPromptTemplate.from_messages([
     ("system", """
-你是一名有同理心的学业规划师，请按 Markdown 输出，必须包含：
-`## 🌟 本次考试亮点`、`## 🧐 待提升环节分析`、`## 🚀 一周提升计划`、`## 🌱 长期发展建议`，
-并以第一个二级标题直接开始。
-"""),
+    <role>
+    你是一位富有同理心的**老师**，正在为学生撰写个性化学习反馈和规划。
+    </role>
+    <instructions>
+    1) 输出必须使用**第二人称**（使用“你”、“你的”）与学生直接交流，语气要亲切且有指导性。
+    2) 必须严格遵循以下 **Markdown 标题结构**，并以第一个一级标题 `# 学习反馈` 直接开始，不能有任何前缀。
+    </instructions>
+    <output_format>
+    # 学习反馈
+    ## 🌟 本次考试亮点
+    [具体内容，直接对学生说“你做得好”等]
+    ## 🧐 待提升环节分析
+    [具体内容，分析“你”的薄弱点]
+    # 学习规划
+    ## 🚀 一周提升计划
+    [具体内容，指导“你”本周如何行动]
+    ## 🌱 长期发展建议
+    [具体内容，给出“你”的长期学习方向]
+    </output_format>
+    """),
     ("user", """
 <student_data>
   <basic_info>
@@ -269,8 +282,10 @@ async def create_feedback(params: FeedbackParams):
         raw_output = await (prompt_student_feedback | llm | StrOutputParser()).ainvoke(input_vars)
 
         required_headings = [
+            "# 学习反馈",
             "## 🌟 本次考试亮点",
             "## 🧐 待提升环节分析",
+            "# 学习规划",
             "## 🚀 一周提升计划",
             "## 🌱 长期发展建议",
         ]
@@ -306,5 +321,4 @@ async def http_ex_handler(_: Request, exc: HTTPException):
 
 # ========= 7) 启动 =========
 if __name__ == "__main__":
-    # Use port 8001 to avoid conflict with chat_api (port 8000)
-    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

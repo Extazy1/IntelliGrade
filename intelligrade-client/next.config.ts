@@ -23,7 +23,6 @@ const INTERNAL_STRAPI_ORIGIN =
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ["images.unsplash.com", "localhost", "47.82.94.221"],
     remotePatterns: [
       {
         protocol: "http",
@@ -32,6 +31,14 @@ const nextConfig: NextConfig = {
       {
         protocol: "http",
         hostname: "127.0.0.1",
+      },
+      {
+        protocol: "http",
+        hostname: "47.82.94.221",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
       },
       {
         protocol: "https",
@@ -47,8 +54,10 @@ const nextConfig: NextConfig = {
     appIsrStatus: false,
   },
   async rewrites() {
+    // Backend API hosts - override with environment variables for production
+    // Example: CHAT_API_HOST=http://47.82.94.221:8000 EDU_API_HOST=http://47.82.94.221:8000
     const CHAT_API_HOST = process.env.CHAT_API_HOST || "http://127.0.0.1:8000";
-    const EDU_API_HOST = process.env.EDU_API_HOST || "http://127.0.0.1:8001";
+    const EDU_API_HOST = process.env.EDU_API_HOST || "http://127.0.0.1:8000";
     
     return [
       // Strapi API proxies

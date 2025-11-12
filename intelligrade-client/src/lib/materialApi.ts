@@ -4,13 +4,14 @@
 // via Next.js proxy configured in next.config.ts
 //
 // BACKEND CONFIGURATION:
-// - Backend service runs on port 8001 (configurable via PORT env var)
+// - Backend service runs on port 8000 (configurable via PORT env var)
 // - Endpoints: /generate-lesson-plan, /generate-feedback, /health
-// - Next.js proxy: /api/edu/* → http://localhost:8001/*
+// - Next.js proxy: /api/edu/* → http://localhost:8000/* (or remote host via EDU_API_HOST env var)
 //
 // FRONTEND USAGE:
 // - Components should use empty EDU_API_HOST to leverage Next.js proxy
 // - Fetch calls go to /api/edu/generate-lesson-plan (proxied to backend)
+// - For remote backend: Set EDU_API_HOST environment variable (e.g., http://47.82.94.221:8000)
 
 const CHAT_API_HOST = process.env.NEXT_PUBLIC_CHAT_API_HOST || "";
 

@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # Education API Startup Script
-# Port: 8001 (matches Next.js proxy configuration)
+# Port: 8000 (default education API port)
 
-echo "🚀 Starting Education API on port 8001..."
+echo "🚀 Starting Education API on port 8000..."
 
 # Set environment variables if not already set
 export DEEPSEEK_API_KEY="${DEEPSEEK_API_KEY:-sk-0417c99a0fa4443a9351febeb1e1b9e6}"
 export DEEPSEEK_BASE_URL="${DEEPSEEK_BASE_URL:-https://api.deepseek.com}"
-export PORT="${PORT:-8001}"
+export PORT="${PORT:-8000}"
 
 # Check if virtual environment exists
 if [ ! -d "venv" ]; then

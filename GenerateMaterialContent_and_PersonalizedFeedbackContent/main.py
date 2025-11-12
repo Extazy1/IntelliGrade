@@ -334,6 +334,6 @@ async def http_ex_handler(_: Request, exc: HTTPException):
 
 # ========= 7) Startup =========
 if __name__ == "__main__":
-    # Use port 8001 to match Next.js proxy configuration
-    port = int(os.getenv("PORT", "8001"))
+    # Use port 8000 (default for education API)
+    port = int(os.getenv("PORT", "8000"))
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)

@@ -5,9 +5,9 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Loader2, Copy, Download, Sparkles } from "lucide-react";
 
-/** Backend address: use proxy path to avoid CORS */
+/** Backend address: direct connection to FastAPI backend */
 const EDU_API_HOST =
-  process.env.NEXT_PUBLIC_EDU_API_HOST || "";
+  process.env.NEXT_PUBLIC_EDU_API_HOST || "http://47.82.94.221:8000";
 
 interface ErrorResponse {
   error?: { message?: string };
@@ -137,7 +137,7 @@ export default function PersonalizedFeedbackContent() {
       }
 
       const json = await safeFetchJSON<FeedbackResponse>(
-        `${EDU_API_HOST}/api/edu/generate-feedback`,
+        `${EDU_API_HOST}/generate-feedback`,
         {
           method: "POST",
           headers: {

@@ -46,9 +46,12 @@ function toChatMessage(data: BackendResponse): ChatMessage {
     url: a?.url,
   }));
 
+  // Ensure role is exactly "user" or "assistant"
+  const role: Role = (am.role === "user" || am.role === "assistant") ? am.role : "assistant";
+
   const msg: ChatMessage = {
     id: am.id || "asst_" + Date.now(),
-    role: am.role || "assistant",
+    role: role,
     content: am.content || "",
     createdAt: am.createdAt || new Date().toISOString(),
     attachments: atts.length > 0 ? atts : undefined,

@@ -259,7 +259,6 @@ async def create_lesson_plan(params: LessonPlanParams):
         print(traceback.format_exc())
         raise HTTPException(status_code=500, detail=f"Internal error: {type(e).__name__}: {str(e)}")
 
-
 @app.post("/generate-feedback", summary="Generate Personalized Learning Feedback", tags=["Student Feedback"])
 async def create_feedback(params: FeedbackParams):
     try:

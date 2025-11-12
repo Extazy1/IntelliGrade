@@ -33,6 +33,9 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "http://47.82.94.221",
+        "http://47.82.94.221:3000",
+        "https://47.82.94.221",
     ],
     allow_credentials=True,
     allow_methods=["*"],     # 允许 OPTIONS/POST 等
@@ -244,12 +247,17 @@ async def create_lesson_plan(params: LessonPlanParams):
         return {"status": "success", "lesson_plan": validated}
 
     except MarkdownValidationError as e:
+        print(f"❌ Markdown validation error: {e}")
         raise HTTPException(status_code=422, detail=f"教案结构校验失败: {e}")
     except RuntimeError as e:
         # API Key 未配置等
+        print(f"❌ Runtime error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"内部错误: {type(e).__name__}")
+        import traceback
+        print(f"❌ Unexpected error: {type(e).__name__}: {str(e)}")
+        print(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"内部错误: {type(e).__name__}: {str(e)}")
 
 
 @app.post("/generate-feedback", summary="生成个性化学习反馈", tags=["学生反馈"])
@@ -293,11 +301,16 @@ async def create_feedback(params: FeedbackParams):
         return {"status": "success", "feedback": validated}
 
     except MarkdownValidationError as e:
+        print(f"❌ Markdown validation error: {e}")
         raise HTTPException(status_code=422, detail=f"反馈结构校验失败: {e}")
     except RuntimeError as e:
+        print(f"❌ Runtime error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"内部错误: {type(e).__name__}")
+        import traceback
+        print(f"❌ Unexpected error: {type(e).__name__}: {str(e)}")
+        print(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"内部错误: {type(e).__name__}: {str(e)}")
 
 
 # === 预检兜底（正常情况下 CORSMiddleware 已处理，这里仅为保险） ===

@@ -9,6 +9,11 @@ import { Loader2, Copy, Download, Sparkles, RotateCcw } from "lucide-react";
 const EDU_API_HOST =
   process.env.NEXT_PUBLIC_EDU_API_HOST || "http://127.0.0.1:8000";
 
+interface ErrorResponse {
+  error?: { message?: string };
+  detail?: { message?: string } | string;
+}
+
 /** Safe request (with timeout and error message extraction) */
 async function safeFetchJSON<T>(
   url: string,
@@ -20,15 +25,17 @@ async function safeFetchJSON<T>(
   try {
     const res = await fetch(url, { ...init, signal: ctrl.signal });
     const text = await res.text();
-    let data: any = null;
+    let data: ErrorResponse | T | null = null;
     try {
       data = text ? JSON.parse(text) : null;
     } catch {
       // Not JSON
     }
     if (!res.ok) {
+      const errorData = data as ErrorResponse;
       const msg =
-        (data && (data.error?.message || data.detail?.message || data.detail)) ||
+        (errorData && (errorData.error?.message || 
+          (typeof errorData.detail === 'object' ? errorData.detail?.message : errorData.detail))) ||
         text ||
         `HTTP ${res.status}`;
       throw new Error(msg);
@@ -94,7 +101,14 @@ export default function GenerateMaterialContent() {
         teaching_goals,
       };
 
-      const json = await safeFetchJSON<any>(
+      interface LessonPlanResponse {
+        lesson_plan?: string;
+        markdown?: string;
+        data?: string;
+        result?: string;
+      }
+
+      const json = await safeFetchJSON<LessonPlanResponse>(
         `${EDU_API_HOST}/generate-lesson-plan`,
         {
           method: "POST",
@@ -111,8 +125,9 @@ export default function GenerateMaterialContent() {
         json?.lesson_plan ?? json?.markdown ?? json?.data ?? json?.result ?? "";
       if (!out) throw new Error("Backend returned no displayable content (lesson_plan/markdown is empty)");
       setMd(String(out));
-    } catch (e: any) {
-      setErr(e?.message || "Generation failed, please try again later.");
+    } catch (e) {
+      const errorMessage = e instanceof Error ? e.message : "Generation failed, please try again later.";
+      setErr(errorMessage);
     } finally {
       setLoading(false);
     }

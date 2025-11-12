@@ -24,6 +24,23 @@ const nextConfig: NextConfig = {
   /* config options here */
   images: {
     domains: ["images.unsplash.com", "localhost", "47.82.94.221"],
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+      },
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   devIndicators: {
     buildActivity: false,

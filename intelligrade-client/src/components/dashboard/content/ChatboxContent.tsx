@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import { sendChatMessage, sendChatMessageWithFiles } from "@/lib/chatboxApi";
 import type { ChatMessage, ChatAttachment } from "@/types/chat";
 
@@ -81,10 +82,11 @@ export default function ChatboxContent({ sessionId: propSessionId }: { sessionId
         reply = await sendChatMessage({ sessionId, content: text });
       }
       setMessages((prev) => prev.map((m) => (m.id === asstId ? reply : m)));
-    } catch (err: any) {
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
       setMessages((prev) =>
         prev.map((m) =>
-          m.id === asstId ? { ...m, content: `[Send failed] ${err?.message || String(err)}` } : m
+          m.id === asstId ? { ...m, content: `[Send failed] ${errorMessage}` } : m
         )
       );
     } finally {
@@ -139,11 +141,13 @@ export default function ChatboxContent({ sessionId: propSessionId }: { sessionId
             <div className="mb-2 flex flex-wrap gap-2">
               {pendingFiles.map((f, i) =>
                 f.type.startsWith("image/") ? (
-                  <div key={i} className="relative">
-                    <img
+                  <div key={i} className="relative h-16 w-16">
+                    <Image
                       src={URL.createObjectURL(f)}
                       alt={f.name}
-                      className="h-16 w-16 rounded-lg object-cover ring-1 ring-gray-200"
+                      fill
+                      className="rounded-lg object-cover ring-1 ring-gray-200"
+                      unoptimized
                     />
                     <button
                       type="button"
@@ -340,12 +344,16 @@ function AttachmentsGrid({ attachments, dark }: { attachments: ChatAttachment[];
     <div className={`mt-2 grid grid-cols-2 gap-2 ${attachments.length >= 3 ? "md:grid-cols-3" : ""}`}>
       {attachments.map((a, i) =>
         a.mime?.startsWith("image/") && a.url ? (
-          <a key={i} href={a.url} target="_blank" className="block">
-            <img
-              src={a.url}
-              alt={a.name}
-              className={`h-28 w-full rounded-lg object-cover ring-1 ${dark ? "ring-white/20" : "ring-gray-200"}`}
-            />
+          <a key={i} href={a.url} target="_blank" rel="noopener noreferrer" className="block">
+            <div className="relative h-28 w-full">
+              <Image
+                src={a.url}
+                alt={a.name}
+                fill
+                className={`rounded-lg object-cover ring-1 ${dark ? "ring-white/20" : "ring-gray-200"}`}
+                unoptimized
+              />
+            </div>
             <div className={`mt-1 truncate text-[11px] ${dark ? "text-white/80" : "text-gray-600"}`} title={a.name}>
               {a.name}
             </div>

@@ -18,10 +18,25 @@ type SendFilesArgs = {
   files: File[];   // Multiple files
 };
 
-function toChatMessage(data: any): ChatMessage {
+interface BackendResponse {
+  assistantMessage?: {
+    id?: string;
+    role?: string;
+    content?: string;
+    createdAt?: string;
+    attachments?: Array<{
+      name?: string;
+      mime?: string;
+      size?: number;
+      url?: string;
+    }>;
+  };
+}
+
+function toChatMessage(data: BackendResponse): ChatMessage {
   // Backend returns: { assistantMessage: { id, role, content, createdAt, attachments? } ... }
   const am = data?.assistantMessage ?? {};
-  const atts: ChatAttachment[] = (am.attachments || []).map((a: any) => ({
+  const atts: ChatAttachment[] = (am.attachments || []).map((a) => ({
     name: a?.name,
     mime: a?.mime,
     size: a?.size,

@@ -12,7 +12,7 @@ export default function PersonalizedFeedbackPage() {
             <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
             <div className="flex-1 bg-muted/80">
                 <div className="h-full p-2">
-                    <div className="bg-background rounded-2xl p-6 h-full shadow-sm">
+                    <div className="bg-background rounded-2xl p-6 h-full shadow-sm overflow-hidden">
                         <PersonalizedFeedbackContent />
                     </div>
                 </div>

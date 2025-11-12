@@ -5,14 +5,14 @@ import os
 
 def test_health():
     """测试健康检查"""
-    response = requests.get("http://localhost:8000/health")
+    response = requests.get("http://localhost:8001/health")
     print("健康检查:", response.json())
 
 
 def test_text_chat():
     """测试纯文本聊天"""
     response = requests.post(
-        "http://localhost:8000/api/chat/messages",
+        "http://localhost:8001/api/chat/messages",
         json={
             "sessionId": "sess_test",
             "message": {
@@ -49,7 +49,7 @@ def test_file_upload():
     }
 
     response = requests.post(
-        "http://localhost:8000/api/chat/messages",
+        "http://localhost:8001/api/chat/messages",
         files=files,
         data=data
     )

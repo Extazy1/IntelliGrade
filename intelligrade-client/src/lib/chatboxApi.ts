@@ -5,7 +5,9 @@
 
 import type { ChatMessage, ChatAttachment } from "@/types/chat";
 
-const API_HOST = process.env.NEXT_PUBLIC_CHAT_API_HOST || "http://localhost:8000";
+// Use proxy path to avoid CORS issues
+// In production, this will be proxied by Next.js rewrites
+const API_HOST = process.env.NEXT_PUBLIC_CHAT_API_HOST || "";
 
 type SendTextArgs = {
   sessionId?: string; // Optional, backend will ignore without error
@@ -37,11 +39,11 @@ function toChatMessage(data: BackendResponse): ChatMessage {
   // Backend returns: { assistantMessage: { id, role, content, createdAt, attachments? } ... }
   const am = data?.assistantMessage ?? {};
   const atts: ChatAttachment[] = (am.attachments || []).map((a) => ({
-    name: a?.name,
-    mime: a?.mime,
-    size: a?.size,
+    name: a?.name || "",
+    mime: a?.mime || "",
+    size: a?.size || 0,
     // RAG route attachments may not have url, handle gracefully
-    url: a?.url || undefined,
+    url: a?.url,
   }));
 
   const msg: ChatMessage = {
@@ -49,7 +51,7 @@ function toChatMessage(data: BackendResponse): ChatMessage {
     role: am.role || "assistant",
     content: am.content || "",
     createdAt: am.createdAt || new Date().toISOString(),
-    attachments: atts,
+    attachments: atts.length > 0 ? atts : undefined,
   };
   return msg;
 }

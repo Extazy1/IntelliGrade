@@ -1,6 +1,8 @@
 // src/lib/eduApi.ts
+// Use proxy path to avoid CORS issues
+// In production, this will be proxied by Next.js rewrites
 export const EDU_API_HOST =
-  process.env.NEXT_PUBLIC_EDU_API_HOST || "http://localhost:8000";
+  process.env.NEXT_PUBLIC_EDU_API_HOST || "";
 
 /** Lesson plan / Teaching materials generation */
 export async function generateLessonPlan(data: {
@@ -10,7 +12,7 @@ export async function generateLessonPlan(data: {
   duration?: string;        // "45min" | "60min" | "90min" | ...
   format?: "lesson-plan" | "slides";
 }) {
-  const res = await fetch(`${EDU_API_HOST}/generate-lesson-plan`, {
+  const res = await fetch(`${EDU_API_HOST}/api/edu/generate-lesson-plan`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -30,7 +32,7 @@ export async function generateFeedback(data: {
   answers_text?: string;    // Answer text (optional)
   scores_text?: string;     // Score text/grades (optional)
 }) {
-  const res = await fetch(`${EDU_API_HOST}/generate-feedback`, {
+  const res = await fetch(`${EDU_API_HOST}/api/edu/generate-feedback`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),

@@ -5,9 +5,9 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Loader2, Copy, Download, Sparkles, RotateCcw } from "lucide-react";
 
-/** Backend address: defaults to 127.0.0.1:8000 per your requirements */
+/** Backend address: use proxy path to avoid CORS */
 const EDU_API_HOST =
-  process.env.NEXT_PUBLIC_EDU_API_HOST || "http://127.0.0.1:8000";
+  process.env.NEXT_PUBLIC_EDU_API_HOST || "";
 
 interface ErrorResponse {
   error?: { message?: string };
@@ -109,7 +109,7 @@ export default function GenerateMaterialContent() {
       }
 
       const json = await safeFetchJSON<LessonPlanResponse>(
-        `${EDU_API_HOST}/generate-lesson-plan`,
+        `${EDU_API_HOST}/api/edu/generate-lesson-plan`,
         {
           method: "POST",
           headers: {

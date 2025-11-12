@@ -47,7 +47,11 @@ const nextConfig: NextConfig = {
     appIsrStatus: false,
   },
   async rewrites() {
+    const CHAT_API_HOST = process.env.CHAT_API_HOST || "http://127.0.0.1:8000";
+    const EDU_API_HOST = process.env.EDU_API_HOST || "http://127.0.0.1:8001";
+    
     return [
+      // Strapi API proxies
       {
         source: "/strapi/api/:path*",
         destination: `${INTERNAL_STRAPI_ORIGIN}/api/:path*`,
@@ -63,6 +67,24 @@ const nextConfig: NextConfig = {
       {
         source: "/strapi/pipeline/:path*",
         destination: `${INTERNAL_STRAPI_ORIGIN}/pipeline/:path*`,
+      },
+      // Chat API proxies (port 8000)
+      {
+        source: "/api/chat/:path*",
+        destination: `${CHAT_API_HOST}/api/chat/:path*`,
+      },
+      // Education API proxies (port 8001)
+      {
+        source: "/api/edu/generate-lesson-plan",
+        destination: `${EDU_API_HOST}/generate-lesson-plan`,
+      },
+      {
+        source: "/api/edu/generate-feedback",
+        destination: `${EDU_API_HOST}/generate-feedback`,
+      },
+      {
+        source: "/api/edu/health",
+        destination: `${EDU_API_HOST}/health`,
       },
     ];
   },

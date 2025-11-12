@@ -14,7 +14,7 @@
 
 const CHAT_API_HOST = process.env.NEXT_PUBLIC_CHAT_API_HOST || "";
 
-/** Set to false to connect directly to backend */
+/** Set to false to use real backend (mock disabled) */
 const USE_MATERIAL_MOCK = false;
 
 export interface GenerateMaterialParams {
@@ -82,8 +82,8 @@ export async function generateMaterial(
     return { markdown: md };
   }
 
-  // Direct backend connection (FastAPI) example:
-  // Assume backend provides POST /materials/generate returning { markdown: "..." }
+  // Direct backend connection (FastAPI):
+  // Backend provides POST /materials/generate returning { markdown: "..." }
   const res = await fetch(`${CHAT_API_HOST}/materials/generate`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -96,7 +96,7 @@ export async function generateMaterial(
   return { markdown: data.markdown || "" };
 }
 
-/* utils */
+/* Utilities */
 function wait(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
 }

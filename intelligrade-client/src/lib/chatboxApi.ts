@@ -3,7 +3,7 @@
 //  - POST /api/chat/messages/direct  (JSON, direct connection without RAG)
 //  - POST /api/chat/messages/rag     (multipart, uses RAG, supports file upload)
 
-import type { ChatMessage, ChatAttachment } from "@/types/chat";
+import type { ChatMessage, ChatAttachment, Role } from "@/types/chat";
 
 // Use proxy path to avoid CORS issues
 // In production, this will be proxied by Next.js rewrites

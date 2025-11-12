@@ -1,8 +1,21 @@
 // src/lib/materialApi.ts
-const CHAT_API_HOST = process.env.NEXT_PUBLIC_CHAT_API_HOST || "http://localhost:8000/api";
+// NOTE: This file is deprecated and not used by the current implementation
+// The actual API calls are made directly in GenerateMaterialContent.tsx and PersonalizedFeedbackContent.tsx
+// via Next.js proxy configured in next.config.ts
+//
+// BACKEND CONFIGURATION:
+// - Backend service runs on port 8001 (configurable via PORT env var)
+// - Endpoints: /generate-lesson-plan, /generate-feedback, /health
+// - Next.js proxy: /api/edu/* → http://localhost:8001/*
+//
+// FRONTEND USAGE:
+// - Components should use empty EDU_API_HOST to leverage Next.js proxy
+// - Fetch calls go to /api/edu/generate-lesson-plan (proxied to backend)
+
+const CHAT_API_HOST = process.env.NEXT_PUBLIC_CHAT_API_HOST || "";
 
 /** Set to false to connect directly to backend */
-const USE_MATERIAL_MOCK = true;
+const USE_MATERIAL_MOCK = false;
 
 export interface GenerateMaterialParams {
   prompt: string;
